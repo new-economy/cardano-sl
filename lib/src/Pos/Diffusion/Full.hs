@@ -13,7 +13,6 @@ module Pos.Diffusion.Full
     ) where
 
 import           Universum
-import           Nub (ordNub)
 
 import qualified Control.Concurrent.STM as STM
 import           Control.Concurrent.Async (Concurrently (..))
