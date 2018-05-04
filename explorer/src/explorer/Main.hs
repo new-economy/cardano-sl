@@ -30,6 +30,7 @@ import           Pos.Explorer.Web (ExplorerProd, explorerPlugin, notifierPlugin,
 import           Pos.Launcher (ConfigurationOptions (..), HasConfigurations, NodeParams (..),
                                NodeResources (..), bracketNodeResources, elimRealMode,
                                loggerBracket, runNode, runServer, withConfigurations)
+import           Pos.Launcher.Configuration (AssetLockPath (..))
 import           Pos.Reporting.Ekg (EkgNodeMetrics (..))
 import           Pos.Update.Worker (updateTriggerWorker)
 import           Pos.Util (logException)
@@ -53,7 +54,7 @@ main = do
 
 action :: ExplorerNodeArgs -> Production ()
 action (ExplorerNodeArgs (cArgs@CommonNodeArgs{..}) ExplorerArgs{..}) =
-    withConfigurations conf $ \ntpConfig ->
+    withConfigurations blPath conf $ \ntpConfig ->
     withCompileInfo $(retrieveCompileTimeInfo) $ do
         CLI.printInfoOnStart cArgs ntpConfig
         logInfo $ "Explorer is enabled!"
@@ -73,6 +74,9 @@ action (ExplorerNodeArgs (cArgs@CommonNodeArgs{..}) ExplorerArgs{..}) =
             explorerInitDB $ \nr@NodeResources {..} ->
                 runExplorerRealMode nr (runNode nr plugins)
   where
+
+    blPath :: Maybe AssetLockPath
+    blPath = AssetLockPath <$> cnaAssetLockPath
 
     conf :: ConfigurationOptions
     conf = CLI.configurationOptions $ CLI.commonArgs cArgs
