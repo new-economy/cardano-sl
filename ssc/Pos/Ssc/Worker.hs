@@ -23,11 +23,12 @@ import           Pos.Arbitrary.Ssc ()
 import           Pos.Binary.Class (AsBinary, Bi, asBinary, fromBinary)
 import           Pos.Binary.Infra ()
 import           Pos.Binary.Ssc ()
-import           Pos.Core (EpochIndex, SlotId (..), StakeholderId, Timestamp (..),
+import           Pos.Core (EpochIndex, HasGenesisBlockVersionData, HasGenesisData,
+                           HasProtocolConstants, SlotId (..), StakeholderId, Timestamp (..),
                            VssCertificate (..), VssCertificatesMap (..), blkSecurityParam,
                            bvdMpcThd, getOurSecretKey, getOurStakeholderId, getSlotIndex, lookupVss,
                            memberVss, mkLocalSlotIndex, mkVssCertificate, slotSecurityParam,
-                           vssMaxTTL, HasProtocolConstants, HasGenesisData, HasGenesisBlockVersionData)
+                           vssMaxTTL)
 import           Pos.Core.Ssc (Commitment (..), InnerSharesMap, Opening, SignedCommitment,
                                getCommitmentsMap)
 import           Pos.Crypto (SecretKey, VssKeyPair, VssPublicKey, randomNumber, runSecureRandom)
@@ -35,6 +36,7 @@ import           Pos.Crypto.Configuration (protocolMagic)
 import           Pos.Crypto.SecretSharing (toVssPublicKey)
 import           Pos.DB (gsAdoptedBVData)
 import           Pos.Diffusion.Types (Diffusion (..))
+import           Pos.Lrc.Consumer.Ssc (getSscRichmen)
 import           Pos.Lrc.Types (RichmenStakes)
 import           Pos.Recovery.Info (recoveryCommGuard)
 import           Pos.Reporting (reportMisbehaviour)
@@ -49,7 +51,6 @@ import           Pos.Ssc.Configuration (HasSscConfiguration, mdNoCommitmentsEpoc
 import           Pos.Ssc.Functions (hasCommitment, hasOpening, hasShares, vssThreshold)
 import           Pos.Ssc.Logic (sscGarbageCollectLocalData, sscProcessCertificate,
                                 sscProcessCommitment, sscProcessOpening, sscProcessShares)
-import           Pos.Ssc.Lrc (getSscRichmen)
 import           Pos.Ssc.Message (SscTag (..))
 import           Pos.Ssc.Mode (SscMode)
 import qualified Pos.Ssc.SecretStorage as SS
