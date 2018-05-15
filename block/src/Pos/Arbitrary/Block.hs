@@ -23,22 +23,22 @@ import           Pos.Arbitrary.Core (genSlotId)
 import           Pos.Arbitrary.Delegation (genDlgPayload)
 import           Pos.Arbitrary.Ssc (SscPayloadDependsOnSlot (..), genSscPayload,
                                     genSscPayloadForSlot)
-import           Pos.Arbitrary.Txp (genTxPayload)
 import           Pos.Arbitrary.Update (genUpdatePayload)
 import           Pos.Binary.Class (biSize)
 import qualified Pos.Block.Base as T
 import qualified Pos.Block.Logic.Integrity as T
 import           Pos.Block.Slog.Types (SlogUndo)
 import           Pos.Block.Types (Undo (..))
-import           Pos.Core (HasProtocolConstants, HasGenesisHash, HeaderHash,
-                           GenesisHash (..), genesisHash, epochSlots)
+import           Pos.Core (GenesisHash (..), HasGenesisHash, HasProtocolConstants, HeaderHash,
+                           epochSlots, genesisHash)
 import qualified Pos.Core as Core
 import qualified Pos.Core.Block as T
 import           Pos.Core.Ssc (SscPayload, SscProof)
-import           Pos.Crypto (ProtocolMagic, PublicKey, SecretKey, createPsk, hash,
-                             toPublic)
+import           Pos.Crypto (ProtocolMagic, PublicKey, SecretKey, createPsk, hash, toPublic)
 import           Pos.Crypto.Configuration (HasProtocolMagic, protocolMagic)
 import           Pos.Data.Attributes (areAttributesKnown)
+
+import           Test.Pos.Txp.Arbitrary (genTxPayload)
 
 newtype BodyDependsOnSlot b = BodyDependsOnSlot
     { genBodyDepsOnSlot :: Core.SlotId -> Gen (T.Body b)
