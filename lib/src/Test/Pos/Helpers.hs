@@ -56,7 +56,7 @@ cborFlatTermValid = property . validFlatTerm . toFlatTerm . encode
 
 -- Test that serialized 'a' has canonical representation, i.e. if we're able to
 -- change its serialized form, it won't be successfully deserialized.
-cborCanonicalRep :: forall a. (Bi a, Show a) => a -> Property
+cborCanonicalRep :: forall a. (Bi a, Eq a, Show a) => a -> Property
 cborCanonicalRep a = property $ do
     let sa = serialize a
     sa' <- R.serialise <$> perturbCanonicity (R.deserialise sa)
@@ -64,7 +64,10 @@ cborCanonicalRep a = property $ do
     pure $ case out of
         -- perturbCanonicity may have not changed anything. Decoding can
         -- succeed in this case.
-        Right a' -> counterexample (show a') (sa == sa')
+        Right a' ->
+          counterexample (show a') $ counterexample (show sa) $ counterexample
+              (show sa')
+              (a /= a' || sa == sa')
         -- It didn't decode. The error had better be a canonicity violation.
         Left err -> counterexample (show err) (isCanonicityViolation err)
   where
