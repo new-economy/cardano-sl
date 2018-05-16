@@ -5,5 +5,7 @@ import           Test.Hspec (hspec)
 import           Spec (spec)
 
 main :: IO ()
-main =
+main = do
     hspec spec
+
+
